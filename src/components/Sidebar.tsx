@@ -9,7 +9,8 @@ import {
   Settings, 
   LogOut,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  FileCode
 } from 'lucide-react'
 import { useState } from 'react'
 import { cn } from '@/lib/utils'
@@ -33,6 +34,12 @@ const menuItems = [
     name: 'Settings', 
     href: '/dashboard/settings', 
     icon: Settings 
+  },
+  { 
+    name: 'API Docs', 
+    href: '/api-docs', 
+    icon: FileCode,
+    external: true 
   },
 ]
 
@@ -85,14 +92,15 @@ export default function Sidebar({ userName }: SidebarProps) {
 
       {/* Navigation */}
       <nav className="flex-1 p-4 space-y-2">
-        {menuItems.map((item) => {
+        {menuItems.map((item: any) => {
           const isActive = pathname === item.href || 
-            (item.href !== '/dashboard' && pathname.startsWith(item.href))
+            (item.href !== '/dashboard' && !item.external && pathname.startsWith(item.href))
           
           return (
             <Link
               key={item.href}
               href={item.href}
+              target={item.external ? '_blank' : undefined}
               className={cn(
                 "flex items-center px-4 py-3 rounded-lg transition-all",
                 isActive 
