@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Save, X } from 'lucide-react'
+import { Save, X, Loader2 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useToast } from '@/components/ui/Toast'
 
@@ -203,7 +203,11 @@ export default function DentalChartTab({ patient }: DentalChartTabProps) {
           disabled={saving}
           className="bg-purple-600 text-white px-6 py-3 rounded-lg hover:bg-purple-700 transition font-semibold flex items-center disabled:opacity-50"
         >
-          <Save className="w-4 h-4 mr-2" />
+          {saving ? (
+            <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+          ) : (
+            <Save className="w-4 h-4 mr-2" />
+          )}
           {saving ? 'Saving...' : 'Save Dental Chart'}
         </button>
       </div>
