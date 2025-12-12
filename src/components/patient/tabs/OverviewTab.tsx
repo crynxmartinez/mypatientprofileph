@@ -37,6 +37,10 @@ export default function OverviewTab({ patient }: OverviewTabProps) {
               <span className="font-semibold">{patient.gender || 'N/A'}</span>
             </div>
             <div>
+              <span className="text-gray-600">City:</span>{' '}
+              <span className="font-semibold">{patient.city || 'N/A'}</span>
+            </div>
+            <div>
               <span className="text-gray-600">Address:</span>{' '}
               <span className="font-semibold">{patient.address || 'N/A'}</span>
             </div>

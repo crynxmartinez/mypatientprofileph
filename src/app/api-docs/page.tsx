@@ -353,7 +353,8 @@ console.log(data.patientId, data.city, data.bloodProfile?.bloodType);`}</pre>
                 { name: 'status', type: 'enum', description: 'Active | Inactive | New' },
                 { name: 'dateOfBirth', type: 'date', description: 'Date of birth' },
                 { name: 'gender', type: 'string', description: 'Gender' },
-                { name: 'address', type: 'string', description: 'Full address' },
+                { name: 'city', type: 'string', description: 'City (e.g., Manila, Quezon City)' },
+                { name: 'address', type: 'string', description: 'Full address (optional)' },
                 { name: 'totalVisits', type: 'number', description: 'Total visit count' },
                 { name: 'lastVisit', type: 'date', description: 'Last visit date' },
               ]}
