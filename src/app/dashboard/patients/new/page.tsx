@@ -73,7 +73,7 @@ export default function NewPatientPage() {
       </div>
 
       {/* Form */}
-      <form onSubmit={handleSubmit} className="max-w-2xl">
+      <form onSubmit={handleSubmit} className="max-w-2xl mx-auto">
         <div className="bg-white rounded-xl shadow-lg p-6 space-y-6">
           {/* Basic Info */}
           <div>
