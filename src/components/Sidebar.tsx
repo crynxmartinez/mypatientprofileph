@@ -50,7 +50,7 @@ export default function Sidebar({ userName }: SidebarProps) {
   return (
     <aside 
       className={cn(
-        "bg-gradient-to-b from-purple-700 to-indigo-800 text-white flex flex-col transition-all duration-300",
+        "bg-gradient-to-b from-purple-700 to-indigo-800 text-white flex flex-col transition-all duration-300 h-screen",
         collapsed ? "w-20" : "w-64"
       )}
     >

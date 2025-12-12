@@ -16,12 +16,12 @@ export default async function DashboardLayout({
   return (
     <div className="min-h-screen flex bg-gray-100">
       {/* Sidebar */}
-      <div className="relative">
+      <div className="sticky top-0 h-screen">
         <Sidebar userName={session.name || session.username} />
       </div>
 
       {/* Main Content */}
-      <main className="flex-1 overflow-auto">
+      <main className="flex-1 overflow-auto min-h-screen">
         {children}
       </main>
     </div>
