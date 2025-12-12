@@ -1,5 +1,6 @@
 import { getSession } from '@/lib/auth'
-import { Settings, User, Shield, Database } from 'lucide-react'
+import { User, Shield, Database } from 'lucide-react'
+import ApiKeyManager from '@/components/settings/ApiKeyManager'
 
 export default async function SettingsPage() {
   const session = await getSession()
@@ -12,7 +13,8 @@ export default async function SettingsPage() {
         <p className="text-gray-500 mt-1">Manage your application settings</p>
       </div>
 
-      <div className="grid md:grid-cols-2 gap-6">
+      <div className="space-y-6">
+        <div className="grid md:grid-cols-2 gap-6">
         {/* Profile Settings */}
         <div className="bg-white rounded-xl shadow-lg p-6">
           <div className="flex items-center mb-4">
@@ -84,6 +86,10 @@ export default async function SettingsPage() {
             </div>
           </div>
         </div>
+        </div>
+
+        {/* API Keys */}
+        <ApiKeyManager />
       </div>
     </div>
   )

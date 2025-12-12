@@ -136,3 +136,18 @@ model ActivityLog {
   performedBy   String?
   createdAt     DateTime @default(now())
 }
+
+// API Keys for external integrations
+model ApiKey {
+  id          String    @id @default(cuid())
+  name        String    // Friendly name for the key
+  key         String    @unique // The actual API key (hashed)
+  keyPreview  String    // Last 4 characters for display
+  adminId     String    // Who created this key
+  permissions String[]  // Array of permissions: read, write, delete
+  lastUsedAt  DateTime?
+  expiresAt   DateTime?
+  isActive    Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}

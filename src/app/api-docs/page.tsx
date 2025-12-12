@@ -44,11 +44,32 @@ export default function ApiDocsPage() {
         <section className="bg-white rounded-xl shadow-lg p-6 mb-6">
           <h2 className="text-xl font-bold text-gray-800 mb-4">🔐 Authentication</h2>
           <p className="text-gray-600 mb-4">
-            Currently, the API uses session-based authentication. Login via the web interface to obtain a session cookie.
+            The API supports two authentication methods:
           </p>
-          <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded">
+          
+          <div className="space-y-4">
+            <div className="bg-purple-50 border border-purple-200 rounded-lg p-4">
+              <h3 className="font-semibold text-purple-800 mb-2">1. API Key (Recommended)</h3>
+              <p className="text-sm text-gray-600 mb-3">
+                Generate an API key from Settings → API Keys in the admin dashboard.
+              </p>
+              <div className="bg-gray-800 text-green-400 p-3 rounded font-mono text-sm overflow-x-auto">
+                <p className="text-gray-400"># Include in request header:</p>
+                <p>Authorization: Bearer mpph_your_api_key_here</p>
+              </div>
+            </div>
+
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <h3 className="font-semibold text-blue-800 mb-2">2. Session Cookie</h3>
+              <p className="text-sm text-gray-600">
+                Login via the web interface to obtain a session cookie. Useful for browser-based integrations.
+              </p>
+            </div>
+          </div>
+
+          <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded mt-4">
             <p className="text-yellow-800 text-sm">
-              <strong>Note:</strong> API token authentication coming soon for external integrations.
+              <strong>Security:</strong> API keys are shown only once when created. Store them securely!
             </p>
           </div>
         </section>
