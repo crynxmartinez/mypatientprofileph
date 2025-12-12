@@ -74,13 +74,165 @@ export default function ApiDocsPage() {
           </div>
         </section>
 
+        {/* Quick Start */}
+        <section className="bg-white rounded-xl shadow-lg p-6 mb-6">
+          <h2 className="text-xl font-bold text-gray-800 mb-4">🚀 Quick Start</h2>
+          <p className="text-gray-600 mb-4">
+            Use these examples to quickly integrate with the MyPatientPH API in your application.
+          </p>
+          
+          <div className="space-y-4">
+            <div className="bg-gray-800 rounded-lg p-4 overflow-x-auto">
+              <p className="text-gray-400 text-sm mb-2"># Fetch all patients (JavaScript/TypeScript)</p>
+              <pre className="text-green-400 text-sm">{`const response = await fetch(
+  'https://mypatientprofileph.vercel.app/api/v1/patients',
+  {
+    headers: {
+      'Authorization': 'Bearer mpph_your_api_key_here',
+      'Content-Type': 'application/json'
+    }
+  }
+);
+const data = await response.json();
+console.log(data.data.patients);`}</pre>
+            </div>
+
+            <div className="bg-gray-800 rounded-lg p-4 overflow-x-auto">
+              <p className="text-gray-400 text-sm mb-2"># Fetch single patient with blood profile</p>
+              <pre className="text-green-400 text-sm">{`const response = await fetch(
+  'https://mypatientprofileph.vercel.app/api/v1/patients/PATIENT_ID',
+  {
+    headers: {
+      'Authorization': 'Bearer mpph_your_api_key_here'
+    }
+  }
+);
+const { data } = await response.json();
+console.log(data.patientId, data.city, data.bloodProfile?.bloodType);`}</pre>
+            </div>
+
+            <div className="bg-gray-800 rounded-lg p-4 overflow-x-auto">
+              <p className="text-gray-400 text-sm mb-2"># cURL example</p>
+              <pre className="text-green-400 text-sm">{`curl -X GET "https://mypatientprofileph.vercel.app/api/v1/patients" \\
+  -H "Authorization: Bearer mpph_your_api_key_here" \\
+  -H "Content-Type: application/json"`}</pre>
+            </div>
+          </div>
+        </section>
+
         {/* Endpoints */}
         <section className="bg-white rounded-xl shadow-lg p-6 mb-6">
           <h2 className="text-xl font-bold text-gray-800 mb-6">📡 API Endpoints</h2>
 
+          {/* V1 Patient Endpoints */}
+          <div className="mb-8">
+            <h3 className="text-lg font-semibold text-purple-600 mb-4 border-b pb-2">Patients (v1 - API Key Auth)</h3>
+            <p className="text-sm text-gray-500 mb-4">These endpoints require API key authentication via the Authorization header.</p>
+            
+            <div className="space-y-4">
+              <EndpointCard
+                method="GET"
+                endpoint="/v1/patients"
+                description="List all patients with pagination. Includes blood profile data."
+                body={null}
+                response={{ 
+                  success: true, 
+                  data: { 
+                    patients: [{ patientId: 'PAT-001', name: 'string', city: 'string', bloodProfile: { bloodType: 'O', rhFactor: 'positive' } }],
+                    pagination: { page: 1, limit: 50, total: 100, totalPages: 2 }
+                  }
+                }}
+              />
+              <EndpointCard
+                method="GET"
+                endpoint="/v1/patients/:id"
+                description="Get single patient with all related data (medical history, blood profile, dental chart, etc.)"
+                body={null}
+                response={{ 
+                  success: true, 
+                  data: { 
+                    id: 'string', 
+                    patientId: 'PAT-001', 
+                    name: 'string', 
+                    city: 'string',
+                    bloodProfile: { bloodType: 'O', rhFactor: 'positive' },
+                    medicalHistory: { allergies: [], medications: [] }
+                  }
+                }}
+              />
+              <EndpointCard
+                method="POST"
+                endpoint="/v1/patients"
+                description="Create a new patient"
+                body={{ name: 'string (required)', email: 'string', phone: 'string', city: 'string', status: 'Active | Inactive | New' }}
+                response={{ success: true, data: { id: 'string', patientId: 'PAT-002' } }}
+              />
+              <EndpointCard
+                method="PUT"
+                endpoint="/v1/patients/:id"
+                description="Update patient information"
+                body={{ name: 'string', email: 'string', phone: 'string', city: 'string', status: 'string' }}
+                response={{ success: true, data: {} }}
+              />
+              <EndpointCard
+                method="DELETE"
+                endpoint="/v1/patients/:id"
+                description="Delete a patient (requires delete permission)"
+                body={null}
+                response={{ success: true, message: 'Patient deleted successfully' }}
+              />
+            </div>
+          </div>
+
+          {/* Query Parameters */}
+          <div className="mb-8">
+            <h3 className="text-lg font-semibold text-purple-600 mb-4 border-b pb-2">Query Parameters</h3>
+            <p className="text-sm text-gray-500 mb-4">Use these query parameters with GET /v1/patients</p>
+            
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-4 py-2 text-left font-semibold">Parameter</th>
+                    <th className="px-4 py-2 text-left font-semibold">Type</th>
+                    <th className="px-4 py-2 text-left font-semibold">Default</th>
+                    <th className="px-4 py-2 text-left font-semibold">Description</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y">
+                  <tr>
+                    <td className="px-4 py-2 font-mono text-purple-600">page</td>
+                    <td className="px-4 py-2">number</td>
+                    <td className="px-4 py-2">1</td>
+                    <td className="px-4 py-2">Page number for pagination</td>
+                  </tr>
+                  <tr>
+                    <td className="px-4 py-2 font-mono text-purple-600">limit</td>
+                    <td className="px-4 py-2">number</td>
+                    <td className="px-4 py-2">50</td>
+                    <td className="px-4 py-2">Items per page (max 100)</td>
+                  </tr>
+                  <tr>
+                    <td className="px-4 py-2 font-mono text-purple-600">status</td>
+                    <td className="px-4 py-2">string</td>
+                    <td className="px-4 py-2">-</td>
+                    <td className="px-4 py-2">Filter by status: Active, Inactive, New</td>
+                  </tr>
+                  <tr>
+                    <td className="px-4 py-2 font-mono text-purple-600">search</td>
+                    <td className="px-4 py-2">string</td>
+                    <td className="px-4 py-2">-</td>
+                    <td className="px-4 py-2">Search by name, email, or patient ID</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
           {/* Auth Endpoints */}
           <div className="mb-8">
-            <h3 className="text-lg font-semibold text-purple-600 mb-4 border-b pb-2">Authentication</h3>
+            <h3 className="text-lg font-semibold text-purple-600 mb-4 border-b pb-2">Authentication (Session-based)</h3>
+            <p className="text-sm text-gray-500 mb-4">These endpoints use session cookies for web interface authentication.</p>
             
             <div className="space-y-4">
               <EndpointCard
@@ -94,34 +246,8 @@ export default function ApiDocsPage() {
                 method="POST"
                 endpoint="/auth/logout"
                 description="End current session"
+                body={null}
                 response={{ success: true }}
-              />
-            </div>
-          </div>
-
-          {/* Patient Endpoints */}
-          <div className="mb-8">
-            <h3 className="text-lg font-semibold text-purple-600 mb-4 border-b pb-2">Patients</h3>
-            
-            <div className="space-y-4">
-              <EndpointCard
-                method="GET"
-                endpoint="/patients"
-                description="Get all patients (paginated)"
-                response={{ patients: [], total: 0, page: 1, limit: 10 }}
-              />
-              <EndpointCard
-                method="GET"
-                endpoint="/patients/:id"
-                description="Get patient by ID with all related data"
-                response={{ id: 'string', name: 'string', email: 'string', '...': '...' }}
-              />
-              <EndpointCard
-                method="POST"
-                endpoint="/patients"
-                description="Create a new patient"
-                body={{ name: 'string', email: 'string', phone: 'string', status: 'Active | Inactive | New' }}
-                response={{ success: true, patient: {} }}
               />
             </div>
           </div>
