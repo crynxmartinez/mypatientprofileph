@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Profile - Reference Guide</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .section { display: block; }
+        .hidden { display: none; }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <!-- Main Container -->
+    <div class="container mx-auto px-4 py-8">
+        
+        <!-- Patient Database Section -->
+        <div id="section-patients" class="section">
+            <!-- Patient List View -->
+            <div id="patient-list-view">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-3xl font-bold text-gray-800">My Patients</h2>
+                </div>
+                
+                <!-- Search & Filters -->
+                <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+                    <div class="grid md:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-gray-700 font-semibold mb-2 text-sm">Search</label>
+                            <input type="text" id="patient-search" onkeyup="searchPatients()" placeholder="Name, email, phone..." class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 font-semibold mb-2 text-sm">Status</label>
+                            <select id="patient-filter-status" onchange="filterPatients()" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                                <option value="">All Status</option>
+                                <option value="active">Active</option>
+                                <option value="inactive">Inactive</option>
+                                <option value="new">New</option>
+                            </select>
+                        </div>
+                        <div class="flex items-end">
+                            <button onclick="clearPatientFilters()" class="w-full bg-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-400 transition">
+                                <i class="fas fa-times mr-2"></i> Clear
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Patient Table -->
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Patient ID</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Contact</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Total Visits</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Last Visit</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="patients-table-body" class="divide-y divide-gray-200">
+                                <!-- Sample row for reference -->
+                                <tr class="hover:bg-gray-50 cursor-pointer">
+                                    <td class="px-6 py-4 text-sm text-gray-600">PAT-001</td>
+                                    <td class="px-6 py-4 text-sm font-semibold text-gray-800">Juan Dela Cruz</td>
+                                    <td class="px-6 py-4 text-sm text-gray-600">
+                                        <div>juan@email.com</div>
+                                        <div class="text-xs text-gray-400">09123456789</div>
+                                    </td>
+                                    <td class="px-6 py-4 text-sm text-gray-600">5</td>
+                                    <td class="px-6 py-4 text-sm text-gray-600">2024-01-15</td>
+                                    <td class="px-6 py-4">
+                                        <span class="px-2 py-1 rounded-full text-xs bg-green-100 text-green-800">Active</span>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <button onclick="viewPatientProfile(samplePatient)" class="text-purple-600 hover:text-purple-800 font-semibold text-sm">
+                                            <i class="fas fa-eye mr-1"></i> View
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Patient Profile View (Hidden by default) -->
+            <div id="patient-profile-view" class="hidden">
+                <button onclick="closePatientProfile()" class="mb-6 text-purple-600 hover:text-purple-700 font-semibold">
+                    <i class="fas fa-arrow-left mr-2"></i> Back to Patient List
+                </button>
+                
+                <!-- Patient Header -->
+                <div class="bg-gradient-to-r from-purple-600 to-blue-600 rounded-xl shadow-lg p-8 text-white mb-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h2 id="profile-patient-name" class="text-3xl font-bold mb-2">Loading...</h2>
+                            <p id="profile-patient-id" class="text-lg opacity-90"></p>
+                        </div>
+                        <div id="profile-patient-status" class="text-right">
+                            <!-- Status badge will be inserted here -->
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Patient Tabs -->
+                <div class="bg-white rounded-xl shadow-lg mb-6">
+                    <div class="border-b border-gray-200">
+                        <nav class="flex flex-wrap space-x-4 px-6" id="patient-tabs">
+                            <button onclick="showPatientTab('overview')" class="patient-tab-btn py-4 px-2 border-b-2 border-purple-600 text-purple-600 font-semibold text-sm">
+                                <i class="fas fa-home mr-1"></i>Overview
+                            </button>
+                            <button onclick="showPatientTab('medical')" class="patient-tab-btn py-4 px-2 border-b-2 border-transparent text-gray-500 hover:text-gray-700 font-semibold text-sm">
+                                <i class="fas fa-heartbeat mr-1"></i>Medical History
+                            </button>
+                            <button onclick="showPatientTab('blood')" class="patient-tab-btn py-4 px-2 border-b-2 border-transparent text-gray-500 hover:text-gray-700 font-semibold text-sm">
+                                <i class="fas fa-tint mr-1"></i>Blood Profile
+                            </button>
+                            <button onclick="showPatientTab('dental')" class="patient-tab-btn py-4 px-2 border-b-2 border-transparent text-gray-500 hover:text-gray-700 font-semibold text-sm">
+                                <i class="fas fa-tooth mr-1"></i>Dental Chart
+                            </button>
+                            <button onclick="showPatientTab('files')" class="patient-tab-btn py-4 px-2 border-b-2 border-transparent text-gray-500 hover:text-gray-700 font-semibold text-sm">
+                                <i class="fas fa-images mr-1"></i>Files & Images
+                            </button>
+                            <button onclick="showPatientTab('treatment')" class="patient-tab-btn py-4 px-2 border-b-2 border-transparent text-gray-500 hover:text-gray-700 font-semibold text-sm">
+                                <i class="fas fa-procedures mr-1"></i>Treatment Plans
+                            </button>
+                            <button onclick="showPatientTab('forms')" class="patient-tab-btn py-4 px-2 border-b-2 border-transparent text-gray-500 hover:text-gray-700 font-semibold text-sm">
+                                <i class="fas fa-file-alt mr-1"></i>Forms
+                            </button>
+                            <button onclick="showPatientTab('visits')" class="patient-tab-btn py-4 px-2 border-b-2 border-transparent text-gray-500 hover:text-gray-700 font-semibold text-sm">
+                                <i class="fas fa-calendar-check mr-1"></i>Visit History
+                            </button>
+                            <button onclick="showPatientTab('activity')" class="patient-tab-btn py-4 px-2 border-b-2 border-transparent text-gray-500 hover:text-gray-700 font-semibold text-sm">
+                                <i class="fas fa-history mr-1"></i>Activity Log
+                            </button>
+                        </nav>
+                    </div>
+                </div>
+                
+                <!-- Tab Content -->
+                <div id="patient-tab-content">
+                    <!-- Content will be loaded dynamically -->
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal Container -->
+    <div id="modal-container"></div>
+    
+    <!-- Toast Container -->
+    <div id="toast-container" class="fixed top-4 right-4 z-50"></div>
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    
+    <!-- Patient Profile JavaScript -->
+    <script src="js/config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/patient-profile.js"></script>
+    <script src="js/medical-history.js"></script>
+    <script src="js/blood-profile.js"></script>
+    <script src="js/dental-chart.js"></script>
+    <script src="js/treatment-plans.js"></script>
+    <script src="js/files.js"></script>
+    <script src="js/forms.js"></script>
+    <script src="js/activity-log.js"></script>
+    
+    <script>
+        // Initialize with sample data for testing
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Patient Profile Reference Guide Loaded');
+        });
+    </script>
+</body>
+</html>

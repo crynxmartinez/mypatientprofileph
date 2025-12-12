@@ -1,0 +1,138 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Admin users for login
+model Admin {
+  id        String   @id @default(cuid())
+  username  String   @unique
+  password  String
+  name      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Patient records
+model Patient {
+  id          String    @id @default(cuid())
+  patientId   String    @unique // PAT-001 format
+  name        String
+  email       String?
+  phone       String?
+  status      String    @default("Active") // Active, Inactive, New
+  totalVisits Int       @default(0)
+  lastVisit   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  // Relations
+  medicalHistory MedicalHistory?
+  bloodProfile   BloodProfile?
+  dentalChart    DentalChart?
+  treatmentPlans TreatmentPlan[]
+  files          PatientFile[]
+  visits         Visit[]
+  activityLogs   ActivityLog[]
+}
+
+// Medical History
+model MedicalHistory {
+  id               String   @id @default(cuid())
+  patientId        String   @unique
+  patient          Patient  @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  allergies        String[] // Array of allergy names
+  medications      String[] // Array of medication names
+  conditions       String[] // Array of condition names
+  bloodPressure    String?
+  emergencyContact String?
+  updatedAt        DateTime @updatedAt
+}
+
+// Blood Profile
+model BloodProfile {
+  id            String   @id @default(cuid())
+  patientId     String   @unique
+  patient       Patient  @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  bloodType     String?  // A, B, AB, O
+  rhFactor      String?  // positive, negative
+  verified      Boolean  @default(false)
+  lastDonation  DateTime?
+  donations     Json[]   // Array of donation objects
+  bpReadings    Json[]   // Array of BP reading objects
+  sugarReadings Json[]   // Array of sugar reading objects
+  updatedAt     DateTime @updatedAt
+}
+
+// Dental Chart
+model DentalChart {
+  id        String   @id @default(cuid())
+  patientId String   @unique
+  patient   Patient  @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  teeth     Json     @default("{}") // Object with tooth number as key
+  updatedAt DateTime @updatedAt
+}
+
+// Treatment Plans
+model TreatmentPlan {
+  id          String   @id @default(cuid())
+  patientId   String
+  patient     Patient  @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  name        String
+  description String?
+  status      String   @default("Active") // Active, Completed, Cancelled
+  procedures  Json[]   // Array of procedure objects
+  progress    Int      @default(0) // 0-100
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// Patient Files
+model PatientFile {
+  id        String   @id @default(cuid())
+  patientId String
+  patient   Patient  @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  type      String   // xray, photo, document, insurance
+  name      String
+  url       String
+  size      Int?
+  createdAt DateTime @default(now())
+}
+
+// Visit History
+model Visit {
+  id          String   @id @default(cuid())
+  patientId   String
+  patient     Patient  @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  date        DateTime
+  startTime   String?
+  endTime     String?
+  clinicId    String?
+  clinicName  String?
+  doctorId    String?
+  doctorName  String?
+  serviceId   String?
+  serviceName String?
+  status      String   @default("Scheduled") // Scheduled, Completed, Cancelled, No Show
+  notes       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// Activity Log
+model ActivityLog {
+  id            String   @id @default(cuid())
+  patientId     String
+  patient       Patient  @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  action        String
+  category      String   // medical_history, blood_profile, dental, etc.
+  details       String?
+  previousValue String?
+  newValue      String?
+  performedBy   String?
+  createdAt     DateTime @default(now())
+}
