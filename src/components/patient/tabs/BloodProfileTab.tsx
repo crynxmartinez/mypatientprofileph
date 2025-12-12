@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { Plus, Save, X } from 'lucide-react'
 import { useRouter } from 'next/navigation'
+import { useToast } from '@/components/ui/Toast'
 
 interface BloodProfileTabProps {
   patient: any
@@ -10,6 +11,7 @@ interface BloodProfileTabProps {
 
 export default function BloodProfileTab({ patient }: BloodProfileTabProps) {
   const router = useRouter()
+  const { showToast } = useToast()
   const bloodProfile = patient.bloodProfile || {}
 
   const [bloodType, setBloodType] = useState(bloodProfile.bloodType || '')
@@ -97,13 +99,13 @@ export default function BloodProfileTab({ patient }: BloodProfileTabProps) {
 
       if (response.ok) {
         router.refresh()
-        alert('Blood profile saved successfully!')
+        showToast('Blood profile saved successfully!', 'success')
       } else {
-        alert('Error saving blood profile')
+        showToast('Error saving blood profile', 'error')
       }
     } catch (error) {
       console.error('Error:', error)
-      alert('Error saving blood profile')
+      showToast('Error saving blood profile', 'error')
     } finally {
       setSaving(false)
     }

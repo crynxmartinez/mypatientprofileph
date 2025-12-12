@@ -1,13 +1,14 @@
 'use client'
 
-import { useState } from 'react'
 import { Upload, FileText, Camera, Image, CreditCard } from 'lucide-react'
+import { useToast } from '@/components/ui/Toast'
 
 interface FilesTabProps {
   patient: any
 }
 
 export default function FilesTab({ patient }: FilesTabProps) {
+  const { showToast } = useToast()
   const files = patient.files || []
   
   const xrays = files.filter((f: any) => f.fileType === 'xray')
@@ -16,7 +17,7 @@ export default function FilesTab({ patient }: FilesTabProps) {
   const insurance = files.filter((f: any) => f.fileType === 'insurance')
 
   const handleUpload = (fileType: string) => {
-    alert(`File upload for ${fileType} - This feature requires cloud storage setup (e.g., AWS S3, Cloudinary)`)
+    showToast(`File upload for ${fileType} - Cloud storage setup required`, 'info')
   }
 
   return (

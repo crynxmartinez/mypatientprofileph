@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { Save, X } from 'lucide-react'
 import { useRouter } from 'next/navigation'
+import { useToast } from '@/components/ui/Toast'
 
 interface DentalChartTabProps {
   patient: any
@@ -25,6 +26,7 @@ const LOWER_TEETH = [48, 47, 46, 45, 44, 43, 42, 41, 31, 32, 33, 34, 35, 36, 37,
 
 export default function DentalChartTab({ patient }: DentalChartTabProps) {
   const router = useRouter()
+  const { showToast } = useToast()
   const dentalChart = patient.dentalChart || {}
   
   const [teeth, setTeeth] = useState<Record<string, { condition: string; notes: string }>>(
@@ -73,13 +75,13 @@ export default function DentalChartTab({ patient }: DentalChartTabProps) {
 
       if (response.ok) {
         router.refresh()
-        alert('Dental chart saved successfully!')
+        showToast('Dental chart saved successfully!', 'success')
       } else {
-        alert('Error saving dental chart')
+        showToast('Error saving dental chart', 'error')
       }
     } catch (error) {
       console.error('Error:', error)
-      alert('Error saving dental chart')
+      showToast('Error saving dental chart', 'error')
     } finally {
       setSaving(false)
     }

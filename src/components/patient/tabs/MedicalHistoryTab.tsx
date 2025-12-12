@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { Plus, X, Save, AlertTriangle } from 'lucide-react'
 import { useRouter } from 'next/navigation'
+import { useToast } from '@/components/ui/Toast'
 
 interface MedicalHistoryTabProps {
   patient: any
@@ -23,6 +24,7 @@ const CONDITIONS_LIST = [
 
 export default function MedicalHistoryTab({ patient }: MedicalHistoryTabProps) {
   const router = useRouter()
+  const { showToast } = useToast()
   const medicalHistory = patient.medicalHistory || {}
   
   const [allergies, setAllergies] = useState<string[]>(medicalHistory.allergies || [])
@@ -81,13 +83,13 @@ export default function MedicalHistoryTab({ patient }: MedicalHistoryTabProps) {
 
       if (response.ok) {
         router.refresh()
-        alert('Medical history saved successfully!')
+        showToast('Medical history saved successfully!', 'success')
       } else {
-        alert('Error saving medical history')
+        showToast('Error saving medical history', 'error')
       }
     } catch (error) {
       console.error('Error:', error)
-      alert('Error saving medical history')
+      showToast('Error saving medical history', 'error')
     } finally {
       setSaving(false)
     }
