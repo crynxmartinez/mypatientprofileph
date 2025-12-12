@@ -24,6 +24,9 @@ model Patient {
   name        String
   email       String?
   phone       String?
+  dateOfBirth DateTime?
+  gender      String?
+  address     String?
   status      String    @default("Active") // Active, Inactive, New
   totalVisits Int       @default(0)
   lastVisit   DateTime?
