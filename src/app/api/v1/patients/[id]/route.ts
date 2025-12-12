@@ -67,7 +67,7 @@ export async function PUT(
 
   try {
     const body = await request.json()
-    const { name, email, phone, status, dateOfBirth, gender, address } = body
+    const { name, email, phone, status, dateOfBirth, gender, address, city } = body
 
     const patient = await prisma.patient.update({
       where: { id: params.id },
@@ -79,6 +79,7 @@ export async function PUT(
         ...(dateOfBirth && { dateOfBirth: new Date(dateOfBirth) }),
         ...(gender !== undefined && { gender }),
         ...(address !== undefined && { address }),
+        ...(city !== undefined && { city }),
       },
     })
 

@@ -83,7 +83,7 @@ export async function POST(request: NextRequest) {
 
   try {
     const body = await request.json()
-    const { name, email, phone, status, dateOfBirth, gender, address } = body
+    const { name, email, phone, status, dateOfBirth, gender, address, city } = body
 
     if (!name) {
       return NextResponse.json({ error: 'Name is required' }, { status: 400 })
@@ -114,6 +114,7 @@ export async function POST(request: NextRequest) {
         dateOfBirth: dateOfBirth ? new Date(dateOfBirth) : null,
         gender,
         address,
+        city,
       },
     })
 
